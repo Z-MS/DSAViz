@@ -1,0 +1,3 @@
+- I'm confusing for loops running time with that of animations. The animations run after the for loops are done executing. The for loops run faster than animations, they don't run in realtime.
+I forgot that I was assigning the 'onfinished' events in the for loops, which means they run after the loop is completed, not while the loop is running.
+REMEMBER TO ALWAYS CONSIDER THE ORDER OF EXECUTION OF STATEMENTS. IT CAN SAVE YOU A LOT OF HEADACHE
