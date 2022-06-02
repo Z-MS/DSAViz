@@ -33,16 +33,16 @@ function search(key, charsArr) {
 	let numText = document.querySelector('.target__num')
 	numText.innerText = key
 
-	let pulsingBoxes = [
+	let flashingBoxes = [
 		{ backgroundColor: '#15E229' },
 		{ backgroundColor: '#4C974E' },
 		{ backgroundColor: '#15E229' }
 	] // keyframes object
 
-	let flashingBox = [
+	let pulsingBox = [
 		{ backgroundColor: '#15E229'},
 		{ backgroundColor: 'yellow', transform: 'scale(1.25)' },
-		{ backgroundColor: '#15E229'}
+		{ backgroundColor: 'yellow'}
 	]
 
 	let pulsingTiming = {
@@ -59,7 +59,7 @@ function search(key, charsArr) {
 
 	for(let i = 0; i < searchCount; i++) {
 		let searchAnim = elems[i].animate(
-			pulsingBoxes, pulsingTiming
+			flashingBoxes, pulsingTiming
 		)
 
 		searchAnim.pause()
@@ -71,9 +71,12 @@ function search(key, charsArr) {
 
 	if(index != -1) {
 		// Add the special 'found' animation to the array
-		const foundAnim = elems[index].animate(flashingBox, pulsingTiming)
+		const targetBlock = elems[index]
+		const foundAnim = targetBlock.animate(pulsingBox, pulsingTiming)
 		foundAnim.pause()
-
+		foundAnim.onfinish = function () {
+			targetBlock.style.backgroundColor = 'yellow'
+		}
 		myAnims.push(foundAnim)
 	// Handle Search Status 		
 		if(searchCount == 0) {
