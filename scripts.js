@@ -1,9 +1,9 @@
 function createBlocks() {
-	const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+	const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 	let charsArr = []
 	const blocks = document.querySelector('.blocks')
-	const BLOCKSLENGTH = 6
+	const BLOCKSLENGTH = 5
 
 	for(let i = 0; i < BLOCKSLENGTH; i++) {
 		let block = document.createElement('div')
@@ -35,7 +35,7 @@ function search(key, charsArr) {
 
 	let flashingBoxes = [
 		{ backgroundColor: '#15E229' },
-		{ backgroundColor: '#4C974E' },
+		{ backgroundColor: '#4C974E', transform: 'scale(1.05)' },
 		{ backgroundColor: '#15E229' }
 	] // keyframes object
 
@@ -45,10 +45,20 @@ function search(key, charsArr) {
 		{ backgroundColor: 'yellow'}
 	]
 
-	let pulsingTiming = {
-		duration: 1000,
+	let btnFadeIn = [
+		{ opacity: 0 },
+		{ opacity: 1 }
+	]
+
+	let searchTiming = {
+		duration: 500,
 		iterations: 1
-	} // timing object
+	}
+
+	let pulsingTiming = {
+		duration: 800,
+		iterations: 1
+	}
 
 	let myAnims = []
 
@@ -59,7 +69,7 @@ function search(key, charsArr) {
 
 	for(let i = 0; i < searchCount; i++) {
 		let searchAnim = elems[i].animate(
-			flashingBoxes, pulsingTiming
+			flashingBoxes, searchTiming
 		)
 
 		searchAnim.pause()
@@ -68,6 +78,7 @@ function search(key, charsArr) {
 
 	let lastSrchAnim
 	let lastSrchAnimPos
+	let searchBtn = document.querySelector('#search__btn')
 
 	if(index != -1) {
 		// Add the special 'found' animation to the array
@@ -75,17 +86,20 @@ function search(key, charsArr) {
 		const foundAnim = targetBlock.animate(pulsingBox, pulsingTiming)
 		foundAnim.pause()
 		foundAnim.onfinish = function () {
+			searchBtn.style.visibility = 'visible'
+			searchBtn.animate(btnFadeIn, pulsingTiming.duration / 10)
+			searchBtn.style.opacity = 1
 			targetBlock.style.backgroundColor = 'yellow'
 		}
 		myAnims.push(foundAnim)
 	// Handle Search Status 		
 		if(searchCount == 0) {
-			document.querySelector('#status__text').innerHTML = `FOUND <span class="target__num">${key}</span>`
+			setStatus('found', key)
 		} else {
 			lastSrchAnimPos = myAnims.length - 2
 			lastSrchAnim = myAnims[lastSrchAnimPos]
 			lastSrchAnim.onfinish = function () {
-				document.querySelector('#status__text').innerHTML = `FOUND <span class="target__num">${key}</span>`
+				setStatus('found', key)
 				myAnims[myAnims.length - 1].play()
 			}
 		}
@@ -94,7 +108,10 @@ function search(key, charsArr) {
 		lastSrchAnimPos = myAnims.length - 1
 		lastSrchAnim = myAnims[lastSrchAnimPos]
 		lastSrchAnim.onfinish = function () {
-			document.querySelector('#status__text').innerHTML = `COULD NOT FIND <span class="target__num">${key}</span>`
+			searchBtn.style.visibility = 'visible'
+			searchBtn.animate(btnFadeIn, pulsingTiming.duration / 10)
+			searchBtn.style.opacity = 1
+			setStatus('notfound', key)
 		}
 	}
 	
@@ -114,10 +131,33 @@ function init() {
 	// Linear search through a JavaScript Set
 	let charsArr = createBlocks()
 	const MIN = 0
-	const MAX = 9
+	const MAX = 10
 	// random number between 0 and 9
 	const target = Math.floor(Math.random() * (MAX - MIN + 1) + MIN)
 	search(target, charsArr)	
+}
+
+function setStatus(msg, num = "") {
+	const statuses = {
+		searching: "<p id='status__text'>SEARCHING FOR <span class='target__num'></span></p>",
+		found: `FOUND <span class="target__num">${num}</span>`,
+		notfound: `COULD NOT FIND <span class="target__num">${num}</span>`
+	}
+	
+	document.querySelector('#status__text').innerHTML = statuses[`${msg}`]
+}
+
+function reset() {
+	setStatus('searching')
+	document.querySelector('.blocks').innerHTML = ""
+	let searchBtn = document.querySelector('#search__btn')
+	searchBtn.style.opacity = 0
+	searchBtn.style.visibility = 'hidden'
+}
+
+function newSearch() {
+	reset()
+	init()
 }
 
 init()
