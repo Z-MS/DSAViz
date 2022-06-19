@@ -1,11 +1,11 @@
 # DSAViz
-DSAViz is a web app used for visualising simple data structures and algorithms.
+DSAViz is a web app that contains simple simulations of selected data structures and algorithms.
 
-It currently contains a simplified simulation of the linear search algorithm.
+For now, there's only a simulation of the linear search algorithm.
 
 I plan to create simulations of these algorithms and data structures in the near future:
 * Binary Search
 * Queues
 * Selection Sort
 
-I know this README is boring. Sorry about that, I don't have much to say 😅
+I know I said simulations too many times. Sorry about that 😅
